@@ -26,13 +26,13 @@ function! qfsigns#Qfsigns(clearonly) "{{{
         return
     endif
     "Setting signs
-    let a:bufnr    = bufnr('%')
+    let a:bufnr    = &l:filetype ==# 'qf' ? bufnr('#') : bufnr('%')
     let a:errorFnr = []
     for a:qfrow in getqflist()
         if a:qfrow.bufnr == a:bufnr
             if a:qfrow.lnum > 0
                 if count(a:errorFnr, a:qfrow.lnum) == 0
-                    execute 'sign place '.(get(g:qfsigns#Config,'id') + b:qfsignsMaxIndex).' line='.a:qfrow.lnum.' name='.get(g:qfsigns#Config,'name').' buffer='.winbufnr(0)
+                    execute 'sign place '.(get(g:qfsigns#Config,'id') + b:qfsignsMaxIndex).' line='.a:qfrow.lnum.' name='.get(g:qfsigns#Config,'name').' buffer='.a:bufnr
                     let b:qfsignsMaxIndex += 1
                     call add(a:errorFnr, a:qfrow.lnum)
                 endif
